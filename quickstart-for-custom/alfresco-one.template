@@ -24,7 +24,8 @@
                         "KeyPairName",
                         "BastionSecurityGroupID",
                         "AlfrescoInstanceType",
-                        "IndexInstanceType"
+                        "IndexInstanceType",
+                        "ElasticSearchInstanceType"
                     ]
                 },
                 {
@@ -105,6 +106,9 @@
                 },
                 "IndexNodesMinSize": {
                     "default": "Index Nodes Min Size"
+                },
+                "ElasticSearchInstanceType": {
+                    "default": "ElasticSearch Server Instance Type"
                 },
                 "KeyPairName": {
                     "default": "SSH Key Name"
@@ -254,6 +258,36 @@
         "IndexNodesMinSize": {
             "Default": "2",
             "Description": "The minimum size of the Auto Scaling group",
+            "Type": "String"
+        },
+        "ElasticSearchInstanceType": {
+            "AllowedValues": [
+                "t2.large",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "r3.large",
+                "r3.xlarge"
+            ],
+            "ConstraintDescription": "Must contain valid instance type",
+            "Default": "t2.large",
+            "Description": "Type of EC2 instance for the ElasticSearch instance",
             "Type": "String"
         },
         "KeyPairName": {
@@ -846,6 +880,14 @@
                         "SourceSecurityGroupId": {
                             "Ref": "BastionSecurityGroupID"
                         }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ElasticSearchSecurityGroup"
+                        }
                     }
                 ]
             }
@@ -876,6 +918,84 @@
                 "SourceSecurityGroupId": {
                     "Ref": "AlfrescoSecurityGroup"
                 }
+            }
+        },
+        "ElasticSearchInstanceEIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc",
+                "InstanceId": {
+                    "Ref": "ElasticSearchInstance"
+                }
+            }
+        },
+        "ElasticSearchInstance" : {
+              "Type" : "AWS::EC2::Instance",
+              "Properties" : {
+                  "ImageId" : "ami-0a07226c",
+                  "KeyName" : { "Ref" : "KeyPairName" },
+                  "InstanceType" : { "Ref" : "ElasticSearchInstanceType" },
+                  "NetworkInterfaces": [
+                      {
+                          "AssociatePublicIpAddress": true,
+                          "DeleteOnTermination": "true",
+                          "DeviceIndex": 0,
+                          "SubnetId": {
+                              "Ref": "PublicSubnet1ID"
+                          },
+                          "GroupSet": [
+                              {
+                                  "Ref": "ElasticSearchSecurityGroup"
+                              }
+                          ]
+                      }
+                  ],
+                  "BlockDeviceMappings" : [
+                    {
+                      "DeviceName" : "/dev/sda1",
+                      "Ebs" : { "VolumeSize" : "10" }
+                    }
+                  ],
+                  "Tags" : [ {
+                     "Key" : "Name",
+                     "Value" : "ElasticSearch Server node"
+                 } ],
+                 "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "# Put here whatever you need to run in this instance\n",
+                                "# is important to end each line with backslash n and comma\n",
+                                "# in all lines but the last one\n"
+                            ]
+                        ]
+                    }
+                }
+            }
+        },
+        "ElasticSearchSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enables 3rd Party Access to ElasticSearch",
+                "VpcId": {
+                    "Ref": "VPCID"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "CidrIp": "34.248.67.74/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "CidrIp": "34.248.67.74/32"
+                    }
+                ]
             }
         },
         "AlfrescoASLaunchConfig": {
