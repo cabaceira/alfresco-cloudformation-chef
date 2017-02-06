@@ -630,7 +630,7 @@
             "DependsOn": "BastionStack",
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "https://raw.githubusercontent.com/Alfresco/alfresco-cloudformation-chef/master/quickstart-for-custom/alfresco-one.template",
+                "TemplateURL": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/cftemplates/alfresco-one.template",
                 "Parameters": {
                     "AlfrescoInstanceType": {
                         "Ref": "AlfrescoInstanceType"
