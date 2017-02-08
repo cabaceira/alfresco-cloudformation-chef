@@ -668,6 +668,9 @@
                     "IndexNodesMinSize": {
                         "Ref": "IndexNodesMinSize"
                     },
+                    "ElasticSearchInstanceType": {
+                        "Ref": "ElasticSearchInstanceType"
+                    },
                     "KeyPairName": {
                         "Ref": "KeyPairName"
                     },
