@@ -1052,6 +1052,12 @@
                                 "owner": "root",
                                 "group": "root"
                             },
+                            "/opt/monitoring-agent": {
+                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip",
+                                "mode": "000755",
+                                "owner": "root",
+                                "group": "root"
+                            },
                             "/etc/chef/replaceValues.sh": {
                                 "content": {
                                     "Fn::Join": [
@@ -1145,7 +1151,13 @@
                                             {
                                                 "Ref": "AlfrescoTrialLicense"
                                             },
-                                            " -o /usr/share/tomcat/shared/classes/alfresco/extension/license/license.lic\n"
+                                            " -o /usr/share/tomcat/shared/classes/alfresco/extension/license/license.lic\n",
+                                            "sed -i 's/@@DB_HOST@@/", { "Fn::GetAtt": [ "RDSDBInstance", "Endpoint.Address" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_NAME@@/", { "Ref": "RDSDBName" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_USERNAME@@/", { "Ref": "RDSUsername" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_PASSWORD@@/", { "Ref": "RDSPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@ALFRESCO_PASSWORD@@/", { "Ref": "AlfrescoPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/audit-access.sh\n",
+                                            "sed -i 's/@@ES_IPADDRESS@@/", { "Fn::GetAtt": [ "ElasticSearchIntance", "PrivateIp" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/logstash.conf\n"
                                         ]
                                     ]
                                 },
@@ -1429,6 +1441,12 @@
                                 "owner": "root",
                                 "group": "root"
                             },
+                            "/opt/monitoring-agent": {
+                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip",
+                                "mode": "000755",
+                                "owner": "root",
+                                "group": "root"
+                            },
                             "/etc/chef/replaceValues.sh": {
                                 "content": {
                                     "Fn::Join": [
@@ -1522,7 +1540,13 @@
                                             {
                                                 "Ref": "AlfrescoTrialLicense"
                                             },
-                                            " -o /usr/share/tomcat/shared/classes/alfresco/extension/license/license.lic\n"
+                                            " -o /usr/share/tomcat/shared/classes/alfresco/extension/license/license.lic\n",
+                                            "sed -i 's/@@DB_HOST@@/", { "Fn::GetAtt": [ "RDSDBInstance", "Endpoint.Address" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_NAME@@/", { "Ref": "RDSDBName" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_USERNAME@@/", { "Ref": "RDSUsername" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@DB_PASSWORD@@/", { "Ref": "RDSPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
+                                            "sed -i 's/@@ALFRESCO_PASSWORD@@/", { "Ref": "AlfrescoPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/audit-access.sh\n",
+                                            "sed -i 's/@@ES_IPADDRESS@@/", { "Fn::GetAtt": [ "ElasticSearchIntance", "PrivateIp" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/logstash.conf\n"
                                         ]
                                     ]
                                 },
