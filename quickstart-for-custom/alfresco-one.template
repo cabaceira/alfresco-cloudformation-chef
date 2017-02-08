@@ -494,6 +494,50 @@
                 "Partition": "aws",
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             }
+        },
+        "S3EndPoints": {
+            "us-east-1": {
+              "endpoint": "s3-external-1.amazonaws.com"
+            },
+            "us-east-2": {
+              "endpoint": "s3-us-east-2.amazonaws.com"
+            },
+            "us-west-1": {
+              "endpoint": "s3-us-west-1.amazonaws.com"
+            },
+            "us-west-2": {
+              "endpoint": "s3-us-west-2.amazonaws.com"
+            },
+            "ca-central-1": {
+              "endpoint": "s3-ca-central-1.amazonaws.com"
+            },
+            "ap-south-1": {
+              "endpoint": "s3-ap-south-1.amazonaws.com"
+            },
+            "ap-northeast-2": {
+              "endpoint": "s3-ap-northeast-2.amazonaws.com"
+            },
+            "ap-southeast-1": {
+              "endpoint": "s3-ap-southeast-1.amazonaws.com"
+            },
+            "ap-southeast-2": {
+              "endpoint": "s3-ap-southeast-2.amazonaws.com"
+            },
+            "ap-northeast-1": {
+              "endpoint": "s3-ap-northeast-1.amazonaws.com"
+            },
+            "eu-central-1": {
+              "endpoint": "s3-eu-central-1.amazonaws.com"
+            },
+            "eu-west-1": {
+              "endpoint": "s3-eu-west-1.amazonaws.com"
+            },
+            "eu-west-2": {
+              "endpoint": "s3-eu-west-2.amazonaws.com"
+            },
+            "sa-east-1": {
+              "endpoint": "s3-sa-east-1.amazonaws.com"
+            }
         }
     },
     "Conditions": {
@@ -920,19 +964,11 @@
                 }
             }
         },
-        "ElasticSearchInstanceEIP": {
-            "Type": "AWS::EC2::EIP",
-            "Properties": {
-                "Domain": "vpc",
-                "InstanceId": {
-                    "Ref": "ElasticSearchInstance"
-                }
-            }
-        },
+
         "ElasticSearchInstance" : {
               "Type" : "AWS::EC2::Instance",
               "Properties" : {
-                  "ImageId" : "ami-0a07226c",
+                  "ImageId" : "ami-0689ac60",
                   "KeyName" : { "Ref" : "KeyPairName" },
                   "InstanceType" : { "Ref" : "ElasticSearchInstanceType" },
                   "NetworkInterfaces": [
@@ -1101,6 +1137,17 @@
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
+                                            },
+                                            "/g' /etc/chef/chef-client.json\n",
+                                            "sed -i 's/@@AWS_S3ENDPOINT@@/",
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "S3EndPoints",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "endpoint"
+                                                ]
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
                                             "ALFPASS=$(printf %s ",
@@ -1489,6 +1536,17 @@
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
+                                            },
+                                            "/g' /etc/chef/chef-client.json\n",
+                                            "sed -i 's/@@AWS_S3ENDPOINT@@/",
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "S3EndPoints",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "endpoint"
+                                                ]
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
                                             "ALFPASS=$(printf %s ",
