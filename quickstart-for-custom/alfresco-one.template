@@ -580,13 +580,37 @@
                         "IpProtocol": "tcp",
                         "FromPort": "80",
                         "ToPort": "80",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": "188.250.24.30/32"
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
-                        "CidrIp": "0.0.0.0/0"
+                        "FromPort": "5601",
+                        "ToPort": "5601",
+                        "CidrIp": "188.250.24.30/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "CidrIp": "34.249.215.29/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "CidrIp": "188.250.24.30/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "CidrIp": "34.249.215.29/32"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "CidrIp": "188.250.24.30/32"
                     }
                 ]
             }
@@ -911,10 +935,10 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
+                        "FromPort": "80",
+                        "ToPort": "80",
                         "SourceSecurityGroupId": {
-                            "Ref": "ELBSecurityGroup"
+                            "Ref": "AlfrescoSecurityGroup"
                         }
                     },
                     {
@@ -927,10 +951,66 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
+                        "FromPort": "5601",
+                        "ToPort": "5601",
                         "SourceSecurityGroupId": {
-                            "Ref": "ElasticSearchSecurityGroup"
+                            "Ref": "ELBSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "5601",
+                        "ToPort": "5601",
+                        "SourceSecurityGroupId": {
+                            "Ref": "AlfrescoSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "6379",
+                        "ToPort": "6379",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ELBSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "6379",
+                        "ToPort": "6379",
+                        "SourceSecurityGroupId": {
+                            "Ref": "AlfrescoSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ELBSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "SourceSecurityGroupId": {
+                            "Ref": "AlfrescoSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ELBSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "SourceSecurityGroupId": {
+                            "Ref": "AlfrescoSecurityGroup"
                         }
                     }
                 ]
@@ -964,32 +1044,88 @@
                 }
             }
         },
-
+        "ElasticSearchElasticLoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "Subnets": [
+                    {
+                        "Ref": "PublicSubnet1ID"
+                    }
+                ],
+                "AvailabilityZones" : [ "us-east-1a" ],
+                "SecurityGroups": [
+                    {
+                        "Ref": "ELBSecurityGroup"
+                    }
+                ],
+                "Instances" : [
+                    { "Ref" : "ElasticSearchInstance" }
+                ],
+                "Listeners": [
+                    {
+                        "LoadBalancerPort": "80",
+                        "InstancePort": "80",
+                        "Protocol": "HTTP",
+                        "PolicyNames": [
+                            "AlfrescoSetup"
+                        ]
+                    },
+                    {
+                        "LoadBalancerPort": "5601",
+                        "InstancePort": "5601",
+                        "Protocol": "HTTP",
+                        "PolicyNames": [
+                            "AlfrescoSetup"
+                        ]
+                    },
+                    {
+                        "LoadBalancerPort": "9200",
+                        "InstancePort": "9200",
+                        "Protocol": "HTTP",
+                        "PolicyNames": [
+                            "AlfrescoSetup"
+                        ]
+                    },
+                    {
+                        "LoadBalancerPort": "9300",
+                        "InstancePort": "9300",
+                        "Protocol": "HTTP",
+                        "PolicyNames": [
+                            "AlfrescoSetup"
+                        ]
+                    }
+                ],
+                "CrossZone": "false",
+                "HealthCheck": {
+                    "Target": "TCP:80",
+                    "HealthyThreshold": "2",
+                    "UnhealthyThreshold": "3",
+                    "Interval": "30",
+                    "Timeout": "3"
+                }
+            }
+        },
         "ElasticSearchInstance" : {
               "Type" : "AWS::EC2::Instance",
               "Properties" : {
                   "ImageId" : "ami-0689ac60",
                   "KeyName" : { "Ref" : "KeyPairName" },
                   "InstanceType" : { "Ref" : "ElasticSearchInstanceType" },
-                  "NetworkInterfaces": [
+                  "IamInstanceProfile": {
+                      "Ref": "SetupRoleProfile"
+                  },
+                  "SecurityGroups": [
                       {
-                          "AssociatePublicIpAddress": true,
-                          "DeleteOnTermination": "true",
-                          "DeviceIndex": 0,
-                          "SubnetId": {
-                              "Ref": "PublicSubnet1ID"
-                          },
-                          "GroupSet": [
-                              {
-                                  "Ref": "ElasticSearchSecurityGroup"
-                              }
-                          ]
+                          "Ref": "AlfrescoSecurityGroup"
                       }
                   ],
+                  "SubnetId" : {
+                      "Ref": "PrivateSubnet1ID"
+                  },
                   "BlockDeviceMappings" : [
                     {
                       "DeviceName" : "/dev/sda1",
-                      "Ebs" : { "VolumeSize" : "10" }
+                      "Ebs" : { "VolumeSize" : "50" }
                     }
                   ],
                   "Tags" : [ {
@@ -1009,29 +1145,6 @@
                         ]
                     }
                 }
-            }
-        },
-        "ElasticSearchSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "Enables 3rd Party Access to ElasticSearch",
-                "VpcId": {
-                    "Ref": "VPCID"
-                },
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "9200",
-                        "ToPort": "9200",
-                        "CidrIp": "34.248.67.74/32"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "9300",
-                        "ToPort": "9300",
-                        "CidrIp": "34.248.67.74/32"
-                    }
-                ]
             }
         },
         "AlfrescoASLaunchConfig": {
