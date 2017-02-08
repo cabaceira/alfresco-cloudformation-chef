@@ -38,4 +38,3 @@ programname,contains,"server" /var/log/tomcat-alfresco/alfresco.log
 programname,contains,"server" ~
 EOF
 systemctl restart  rsyslog.service
-yum install -y jq

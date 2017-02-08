@@ -1158,6 +1158,11 @@
                         ]
                     },
                     "Install": {
+                        "packages" : {
+                            "yum" : {
+                              "jq" : []
+                            }
+                        },
                         "files": {
                             "/etc/chef/chef-client.json": {
                                 "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/share-51.json",
@@ -1547,6 +1552,11 @@
                         ]
                     },
                     "Install": {
+                        "packages" : {
+                            "yum" : {
+                              "jq" : []
+                            }
+                        },
                         "files": {
                             "/etc/chef/chef-client.json": {
                                 "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/solr-51.json",
