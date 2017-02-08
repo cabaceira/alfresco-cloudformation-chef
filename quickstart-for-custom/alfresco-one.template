@@ -1154,7 +1154,7 @@
                                 "group": "root"
                             },
                             "/etc/chef/my_customization.sh": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/cftemplates/my_customization.sh",
+                                "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/quickstart-for-custom/my_customization.sh",
                                 "mode": "000700",
                                 "owner": "root",
                                 "group": "root"
@@ -1531,7 +1531,7 @@
                                 "group": "root"
                             },
                             "/etc/chef/my_customization.sh": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/cftemplates/my_customization.sh",
+                                "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/quickstart-for-custom/my_customization.sh",
                                 "mode": "000700",
                                 "owner": "root",
                                 "group": "root"
