@@ -1275,7 +1275,7 @@
                                             "sed -i 's/@@DB_USERNAME@@/", { "Ref": "RDSUsername" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
                                             "sed -i 's/@@DB_PASSWORD@@/", { "Ref": "RDSPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/activities.properties\n",
                                             "sed -i 's/@@ALFRESCO_PASSWORD@@/", { "Ref": "AlfrescoPassword" }, "/g' /opt/monitoring-agent/logstash-elasticsearch/audit-access.sh\n",
-                                            "sed -i 's/@@ES_IPADDRESS@@/", { "Fn::GetAtt": [ "ElasticSearchIntance", "PrivateIp" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/logstash.conf\n"
+                                            "sed -i 's/@@ES_IPADDRESS@@/", { "Fn::GetAtt": [ "ElasticSearchInstance", "PrivateIp" ] }, "/g' /opt/monitoring-agent/logstash-elasticsearch/logstash.conf\n"
                                         ]
                                     ]
                                 },
