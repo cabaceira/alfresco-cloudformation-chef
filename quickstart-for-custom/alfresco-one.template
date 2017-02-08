@@ -1047,29 +1047,7 @@
                     "Install": {
                         "files": {
                             "/etc/chef/chef-client.json": {
-                                "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/share-51.json"
-                                        ]
-                                    ]
-                                },
+                                "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/share-51.json",
                                 "mode": "000700",
                                 "owner": "root",
                                 "group": "root"
@@ -1446,29 +1424,7 @@
                     "Install": {
                         "files": {
                             "/etc/chef/chef-client.json": {
-                                "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/solr-51.json"
-                                        ]
-                                    ]
-                                },
+                                "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/solr-51.json",
                                 "mode": "000700",
                                 "owner": "root",
                                 "group": "root"
