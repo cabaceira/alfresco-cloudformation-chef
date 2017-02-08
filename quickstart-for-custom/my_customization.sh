@@ -4,7 +4,7 @@
 ### and the Alfresco repo, Share or Solr reconfiguration
 
 ### The main goal for this script is to enable the jar extension
-### capability in Alfresco and also allow deployments of 
+### capability in Alfresco and also allow deployments of
 ### more jar files outside alfresco.war or share.war
 ### to install amps refer to the chef-alfresco documentation
 
@@ -38,3 +38,4 @@ programname,contains,"server" /var/log/tomcat-alfresco/alfresco.log
 programname,contains,"server" ~
 EOF
 systemctl restart  rsyslog.service
+yum install -y jq
