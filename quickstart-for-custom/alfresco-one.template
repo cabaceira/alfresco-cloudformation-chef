@@ -890,6 +890,7 @@
             }
         },
         "RDSDBInstance": {
+            "DependsOn" : "RDSSecurityGroup",
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
                 "MultiAZ": "true",
@@ -1492,6 +1493,7 @@
             }
         },
         "AlfrescoAutoScalingGroup": {
+            "DependsOn" : "AlfrescoASLaunchConfig",
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
                 "VPCZoneIdentifier": [
@@ -1820,6 +1822,7 @@
             }
         },
         "IndexScaleUpPolicy": {
+            "DependsOn" : "AlfrescoAutoScalingGroup",
             "Type": "AWS::AutoScaling::ScalingPolicy",
             "Properties": {
                 "AdjustmentType": "ChangeInCapacity",
@@ -1831,6 +1834,7 @@
             }
         },
         "IndexScaleDownPolicy": {
+            "DependsOn" : "AlfrescoAutoScalingGroup",
             "Type": "AWS::AutoScaling::ScalingPolicy",
             "Properties": {
                 "AdjustmentType": "ChangeInCapacity",
@@ -1896,6 +1900,7 @@
             }
         },
         "IndexAutoScalingGroup": {
+            "DependsOn" : "IndexASLaunchConfig",
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
                 "VPCZoneIdentifier": [
