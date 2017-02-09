@@ -870,6 +870,7 @@
             }
         },
         "RDSSecurityGroup": {
+            "DependsOn" : "AlfrescoSecurityGroup",
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "Security group for RDS DB Instance.",
@@ -1017,6 +1018,7 @@
             }
         },
         "AlfrescoSecurityGroup5701Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
@@ -1031,6 +1033,7 @@
             }
         },
         "AlfrescoSecurityGroup8090Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": {
@@ -1045,6 +1048,7 @@
             }
         },
         "ElasticSearchElasticLoadBalancer": {
+            "DependsOn" : "ElasticSearchInstance",
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
                 "Subnets": [
@@ -1106,6 +1110,7 @@
             }
         },
         "ElasticSearchInstance" : {
+              "DependsOn" : "AlfrescoSecurityGroup",
               "Type" : "AWS::EC2::Instance",
               "Properties" : {
                   "ImageId" : "ami-0689ac60",
@@ -1148,6 +1153,7 @@
             }
         },
         "AlfrescoASLaunchConfig": {
+            "DependsOn" : [ "AlfrescoSecurityGroup", "RDSDBInstance"],
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Metadata": {
                 "AWS::CloudFormation::Init": {
@@ -1408,6 +1414,7 @@
             }
         },
         "AlfrescoScaleUpPolicy": {
+            "DependsOn" : "AlfrescoAutoScalingGroup",
             "Type": "AWS::AutoScaling::ScalingPolicy",
             "Properties": {
                 "AdjustmentType": "ChangeInCapacity",
@@ -1419,6 +1426,7 @@
             }
         },
         "AlfrescoScaleDownPolicy": {
+            "DependsOn" : "AlfrescoAutoScalingGroup",
             "Type": "AWS::AutoScaling::ScalingPolicy",
             "Properties": {
                 "AdjustmentType": "ChangeInCapacity",
@@ -1430,6 +1438,7 @@
             }
         },
         "CPUAlarmHigh": {
+            "DependsOn" : "AlfrescoScaleUpPolicy",
             "Type": "AWS::CloudWatch::Alarm",
             "Properties": {
                 "AlarmDescription": "Scale-up if CPU > 60% for 5 minutes",
@@ -1456,6 +1465,7 @@
             }
         },
         "CPUAlarmLow": {
+            "DependsOn" : "AlfrescoScaleDownPolicy",
             "Type": "AWS::CloudWatch::Alarm",
             "Properties": {
                 "AlarmDescription": "Scale-down if CPU < 40% for 30 minutes",
@@ -1542,6 +1552,7 @@
             }
         },
         "IndexASLaunchConfig": {
+            "DependsOn" : [ "AlfrescoSecurityGroup", "RDSDBInstance" ],
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Metadata": {
                 "AWS::CloudFormation::Init": {
@@ -1831,6 +1842,7 @@
             }
         },
         "IndexCPUAlarmHigh": {
+            "DependsOn" : "IndexScaleUpPolicy",
             "Type": "AWS::CloudWatch::Alarm",
             "Properties": {
                 "AlarmDescription": "Scale-up if CPU > 60% for 5 minutes",
@@ -1857,6 +1869,7 @@
             }
         },
         "IndexCPUAlarmLow": {
+            "DependsOn" : "IndexScaleDownPolicy",
             "Type": "AWS::CloudWatch::Alarm",
             "Properties": {
                 "AlarmDescription": "Scale-down if CPU < 40% for 30 minutes",
