@@ -1154,7 +1154,7 @@
             }
         },
         "AlfrescoASLaunchConfig": {
-            "DependsOn" : [ "AlfrescoSecurityGroup", "RDSDBInstance"],
+            "DependsOn" : [ "RDSDBInstance"],
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Metadata": {
                 "AWS::CloudFormation::Init": {
@@ -1554,7 +1554,7 @@
             }
         },
         "IndexASLaunchConfig": {
-            "DependsOn" : [ "AlfrescoSecurityGroup", "RDSDBInstance" ],
+            "DependsOn" : [ "RDSDBInstance" ],
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Metadata": {
                 "AWS::CloudFormation::Init": {
