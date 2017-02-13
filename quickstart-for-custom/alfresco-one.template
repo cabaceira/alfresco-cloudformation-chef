@@ -1144,7 +1144,7 @@
                   "IamInstanceProfile": {
                       "Ref": "SetupRoleProfile"
                   },
-                  "SecurityGroups": [
+                  "SecurityGroupIds": [
                       {
                           "Ref": "AlfrescoSecurityGroup"
                       }
