@@ -1932,6 +1932,24 @@
                     "Timeout": "PT2H"
                 }
             }
+        },
+        "S3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "DeletionPolicy": "Delete",
+            "Properties": {
+                "BucketName": {
+                    "Fn::If": [
+                        "CustomS3BucketName",
+                        {
+                            "Ref": "S3BucketName"
+                        },
+                        {
+                            "Ref": "AWS::NoValue"
+                        }
+                    ]
+                },
+                "AccessControl": "BucketOwnerFullControl"
+            }
         }
     },
     "Outputs": {
