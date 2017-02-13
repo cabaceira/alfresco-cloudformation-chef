@@ -806,6 +806,7 @@
             }
         },
         "RDSDBSubnetGroup": {
+            "DependsOn" : "RDSSecurityGroup",
             "Type": "AWS::RDS::DBSubnetGroup",
             "Properties": {
                 "DBSubnetGroupDescription": "Subnets available for the RDS DB Instance",
@@ -929,14 +930,6 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
-                        "SourceSecurityGroupId": {
-                            "Ref": "AlfrescoSecurityGroup"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
                         "FromPort": "22",
                         "ToPort": "22",
                         "SourceSecurityGroupId": {
@@ -953,26 +946,10 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "5601",
-                        "ToPort": "5601",
-                        "SourceSecurityGroupId": {
-                            "Ref": "AlfrescoSecurityGroup"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
                         "FromPort": "6379",
                         "ToPort": "6379",
                         "SourceSecurityGroupId": {
                             "Ref": "ELBSecurityGroup"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "6379",
-                        "ToPort": "6379",
-                        "SourceSecurityGroupId": {
-                            "Ref": "AlfrescoSecurityGroup"
                         }
                     },
                     {
@@ -985,26 +962,10 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "9300",
-                        "ToPort": "9300",
-                        "SourceSecurityGroupId": {
-                            "Ref": "AlfrescoSecurityGroup"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
                         "FromPort": "9200",
                         "ToPort": "9200",
                         "SourceSecurityGroupId": {
                             "Ref": "ELBSecurityGroup"
-                        }
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "9200",
-                        "ToPort": "9200",
-                        "SourceSecurityGroupId": {
-                            "Ref": "AlfrescoSecurityGroup"
                         }
                     }
                 ]
@@ -1035,6 +996,81 @@
                 "IpProtocol": "tcp",
                 "FromPort": "8090",
                 "ToPort": "8090",
+                "SourceSecurityGroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                }
+            }
+        },
+        "AlfrescoSecurityGroup80Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "80",
+                "ToPort": "80",
+                "SourceSecurityGroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                }
+            }
+        },
+        "AlfrescoSecurityGroup5601Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "5601",
+                "ToPort": "5601",
+                "SourceSecurityGroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                }
+            }
+        },
+        "AlfrescoSecurityGroup6379Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "6379",
+                "ToPort": "6379",
+                "SourceSecurityGroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                }
+            }
+        },
+        "AlfrescoSecurityGroup9300Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "9300",
+                "ToPort": "9300",
+                "SourceSecurityGroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                }
+            }
+        },
+        "AlfrescoSecurityGroup9200Ingress": {
+            "DependsOn" : "AlfrescoSecurityGroup",
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "AlfrescoSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": "9200",
+                "ToPort": "9200",
                 "SourceSecurityGroupId": {
                     "Ref": "AlfrescoSecurityGroup"
                 }
