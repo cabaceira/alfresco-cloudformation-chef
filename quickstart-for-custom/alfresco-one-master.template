@@ -64,8 +64,7 @@
                         "RDSInstanceType",
                         "RDSDBName",
                         "RDSUsername",
-                        "RDSPassword",
-                        "S3BucketName"
+                        "RDSPassword"
                     ]
                 },
                 {
@@ -162,9 +161,6 @@
                 },
                 "RDSUsername": {
                     "default": "RDS User Name"
-                },
-                "S3BucketName": {
-                    "default": "S3 Bucket Name"
                 },
                 "RemoteAccessCIDR": {
                     "default": "Allowed Bastion External Access CIDR"
@@ -461,11 +457,6 @@
             "Description": "The CIDR IP range that is permitted to access the Alfresco One software. We recommend that you set this value to a trusted IP range.",
             "Type": "String"
         },
-        "S3BucketName": {
-            "Default": "",
-            "Description": "Name of the S3 bucket that will be created for Alfresco to store data. Enter a unique name that does not include uppercase characters.",
-            "Type": "String"
-        },
         "VPCCIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
@@ -753,9 +744,7 @@
                     "RDSUsername": {
                         "Ref": "RDSUsername"
                     },
-                    "S3BucketName": {
-                        "Ref": "S3BucketName"
-                    },
+
                     "VPCID": {
                         "Fn::GetAtt": [
                             "VPCStack",

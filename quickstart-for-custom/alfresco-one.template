@@ -59,8 +59,7 @@
                         "RDSInstanceType",
                         "RDSDBName",
                         "RDSUsername",
-                        "RDSPassword",
-                        "S3BucketName"
+                        "RDSPassword"
                     ]
                 },
                 {
@@ -145,9 +144,6 @@
                 },
                 "RDSUsername": {
                     "default": "RDS User Name"
-                },
-                "S3BucketName": {
-                    "default": "S3 Bucket Name"
                 },
                 "VPCID": {
                     "default": "VPC ID"
@@ -371,11 +367,6 @@
             "Description": "User name for the Amazon RDS MySQL database",
             "Type": "String"
         },
-        "S3BucketName": {
-            "Default": "",
-            "Description": "Name of the S3 bucket that will be created for Alfresco to store data. Enter a unique name that does not include uppercase characters.",
-            "Type": "String"
-        },
         "VPCID": {
             "Description": "ID of your existing VPC for deployment",
             "Type": "AWS::EC2::VPC::Id"
@@ -540,20 +531,6 @@
             }
         }
     },
-    "Conditions": {
-        "CustomS3BucketName": {
-            "Fn::Not": [
-                {
-                    "Fn::Equals": [
-                        {
-                            "Ref": "S3BucketName"
-                        },
-                        ""
-                    ]
-                }
-            ]
-        }
-    },
     "Resources": {
         "NotificationTopic": {
             "Type": "AWS::SNS::Topic",
@@ -715,31 +692,6 @@
                                     "Resource": "*"
                                 },
                                 {
-                                    "Resource": "*",
-                                    "Action": [
-                                        "s3:List*"
-                                    ],
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "s3:*"
-                                    ],
-                                    "Resource": {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:s3:::",
-                                                {
-                                                    "Ref": "S3Bucket"
-                                                },
-                                                "/*"
-                                            ]
-                                        ]
-                                    }
-                                },
-                                {
                                     "Effect": "Allow",
                                     "Action": [
                                         "s3:CreateBucket",
@@ -815,31 +767,6 @@
                                         "cloudwatch:PutMetricAlarm"
                                     ],
                                     "Resource": "*"
-                                },
-                                {
-                                    "Resource": "*",
-                                    "Action": [
-                                        "s3:List*"
-                                    ],
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "s3:*"
-                                    ],
-                                    "Resource": {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:s3:::",
-                                                {
-                                                    "Ref": "S3Bucket"
-                                                },
-                                                "/*"
-                                            ]
-                                        ]
-                                    }
                                 }
                             ]
                         }
@@ -918,6 +845,49 @@
                 }
             },
             "DeletionPolicy": "Snapshot"
+        },
+        "MountTargetSecurityGroup": {
+          "Type": "AWS::EC2::SecurityGroup",
+          "Properties": {
+            "VpcId": { "Ref": "VPCID" },
+            "GroupDescription": "Security group for mount target",
+            "SecurityGroupIngress": [
+              {
+                "IpProtocol": "tcp",
+                "FromPort": "2049",
+                "ToPort": "2049",
+                "CidrIp": "10.0.0.0/16"
+              }
+            ]
+          }
+        },
+        "AlfrescoContentStoreFileSystem" : {
+          "Type" : "AWS::EFS::FileSystem",
+          "PerformanceMode": "generalPurpose",
+          "Properties" : {
+            "FileSystemTags" : [
+              {
+                "Key" : "Name",
+                "Value" : "AlfrescoContentStoreFileSystem"
+              }
+            ]
+          }
+        },
+        "MountTarget1": {
+          "Type": "AWS::EFS::MountTarget",
+          "Properties": {
+            "FileSystemId": { "Ref": "AlfrescoContentStoreFileSystem" },
+            "SubnetId": { "Ref": "PrivateSubnet1ID" },
+            "SecurityGroups": [ { "Ref": "MountTargetSecurityGroup" } ]
+          }
+        },
+        "MountTarget2": {
+          "Type": "AWS::EFS::MountTarget",
+          "Properties": {
+            "FileSystemId": { "Ref": "AlfrescoContentStoreFileSystem" },
+            "SubnetId": { "Ref": "PrivateSubnet2ID" },
+            "SecurityGroups": [ { "Ref": "MountTargetSecurityGroup" } ]
+          }
         },
         "AlfrescoSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
@@ -1086,18 +1056,14 @@
                     {
                         "LoadBalancerPort": "9200",
                         "InstancePort": "9200",
-                        "Protocol": "HTTP",
-                        "PolicyNames": [
-                            "AlfrescoSetup"
-                        ]
+                        "Protocol": "TCP",
+                        "InstanceProtocol" : "TCP"
                     },
                     {
                         "LoadBalancerPort": "9300",
                         "InstancePort": "9300",
-                        "Protocol": "HTTP",
-                        "PolicyNames": [
-                            "AlfrescoSetup"
-                        ]
+                        "Protocol": "TCP",
+                        "InstanceProtocol" : "TCP"
                     }
                 ],
                 "CrossZone": "false",
@@ -1114,7 +1080,7 @@
               "DependsOn" : "AlfrescoSecurityGroup",
               "Type" : "AWS::EC2::Instance",
               "Properties" : {
-                  "ImageId" : "ami-0689ac60",
+                  "ImageId" : "ami-650a2d03",
                   "KeyName" : { "Ref" : "KeyPairName" },
                   "InstanceType" : { "Ref" : "ElasticSearchInstanceType" },
                   "IamInstanceProfile": {
@@ -1167,7 +1133,8 @@
                     "Install": {
                         "packages" : {
                             "yum" : {
-                              "jq" : []
+                              "jq" : [],
+                              "nfs-utils" : []
                             }
                         },
                         "files": {
@@ -1238,27 +1205,12 @@
                                                 "Ref": "RDSPassword"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
-                                            "sed -i 's/@@CONTENTSTORE_S3_BUCKET@@/",
-                                            {
-                                                "Ref": "S3Bucket"
-                                            },
-                                            "/g' /etc/chef/chef-client.json\n",
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
-                                            "sed -i 's/@@AWS_S3ENDPOINT@@/",
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "S3EndPoints",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "endpoint"
-                                                ]
-                                            },
-                                            "/g' /etc/chef/chef-client.json\n",
+
                                             "ALFPASS=$(printf %s ",
                                             {
                                                 "Ref": "AlfrescoPassword"
@@ -1309,6 +1261,8 @@
                                             "yum remove -y mysql-server\n",
                                             "rm -fr /etc/mysql-default* /var/lib/mysql* /var/log/mysql-default* /usr/lib/systemd/system/mysql-default.service\n",
                                             "rm -fr /etc/tomcat-solr /var/lib/tomcat-solr /usr/share/tomcat-solr /var/log/tomcat-solr /var/cache/tomcat-solr /usr/share/tomcat/alf_data/solrhome /usr/share/tomcat/alf_data/solrContentStore /usr/share/tomcat/alf_data/solr4Backup /usr/share/tomcat/alf_data/newAlfrescoModels /etc/sysconfig/tomcat-solr /etc/cron.d/solr-cleaner.cron /usr/lib/systemd/system/tomcat-solr.service\n",
+                                            "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/\n",
+                                            "chown tomcat:tomcat /usr/share/tomcat/alf-data \n",
                                             "cd /etc/chef; chef-client -z -j chef-client.json\n",
                                             "curl 'http://localhost/alfresco/s/enterprise/admin?t=%2Fenterprise%2Fadmin%2Fadmin-transformations' -u admin:",
                                             {
@@ -1638,27 +1592,13 @@
                                                 "Ref": "RDSPassword"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
-                                            "sed -i 's/@@CONTENTSTORE_S3_BUCKET@@/",
-                                            {
-                                                "Ref": "S3Bucket"
-                                            },
-                                            "/g' /etc/chef/chef-client.json\n",
+
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
-                                            "sed -i 's/@@AWS_S3ENDPOINT@@/",
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "S3EndPoints",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "endpoint"
-                                                ]
-                                            },
-                                            "/g' /etc/chef/chef-client.json\n",
+
                                             "ALFPASS=$(printf %s ",
                                             {
                                                 "Ref": "AlfrescoPassword"
@@ -1717,6 +1657,8 @@
                                             "yum remove -y mysql-server\n",
                                             "rm -fr /etc/mysql-default* /var/lib/mysql* /var/log/mysql-default* /usr/lib/systemd/system/mysql-default.service\n",
                                             "rm -fr /etc/tomcat-share /var/lib/tomcat-share /usr/share/tomcat-share /var/log/tomcat-share /var/cache/tomcat-share /etc/sysconfig/tomcat-share /usr/lib/systemd/system/tomcat-share.service\n",
+                                            "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/\n",
+                                            "chown tomcat:tomcat /usr/share/tomcat/alf-data \n",
                                             "cd /etc/chef; chef-client -z -j chef-client.json\n",
                                             "curl 'http://localhost/alfresco/s/enterprise/admin?t=%2Fenterprise%2Fadmin%2Fadmin-transformations' -u admin:",
                                             {
@@ -1958,24 +1900,6 @@
                     },
                     "Timeout": "PT2H"
                 }
-            }
-        },
-        "S3Bucket": {
-            "Type": "AWS::S3::Bucket",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-                "BucketName": {
-                    "Fn::If": [
-                        "CustomS3BucketName",
-                        {
-                            "Ref": "S3BucketName"
-                        },
-                        {
-                            "Ref": "AWS::NoValue"
-                        }
-                    ]
-                },
-                "AccessControl": "BucketOwnerFullControl"
             }
         }
     },
