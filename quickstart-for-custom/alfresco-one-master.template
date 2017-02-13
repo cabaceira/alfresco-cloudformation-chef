@@ -64,7 +64,8 @@
                         "RDSInstanceType",
                         "RDSDBName",
                         "RDSUsername",
-                        "RDSPassword"
+                        "RDSPassword",
+                        "S3BucketName"
                     ]
                 },
                 {
@@ -161,6 +162,9 @@
                 },
                 "RDSUsername": {
                     "default": "RDS User Name"
+                },
+                "S3BucketName": {
+                    "default": "S3 Bucket Name for a temporary semaphore, not used for contentstore. EFS is for contentstore"
                 },
                 "RemoteAccessCIDR": {
                     "default": "Allowed Bastion External Access CIDR"
@@ -449,6 +453,11 @@
         "RDSUsername": {
             "Default": "alfresco",
             "Description": "User name for the Amazon RDS MySQL database",
+            "Type": "String"
+        },
+        "S3BucketName": {
+            "Default": "",
+            "Description": "Name of the S3 bucket for a temporary semaphore. DO NOT include uppercase characters. This is not for ContentStore",
             "Type": "String"
         },
         "RemoteAccessCIDR": {
@@ -744,7 +753,9 @@
                     "RDSUsername": {
                         "Ref": "RDSUsername"
                     },
-
+                    "S3BucketName": {
+                        "Ref": "S3BucketName"
+                    },
                     "VPCID": {
                         "Fn::GetAtt": [
                             "VPCStack",

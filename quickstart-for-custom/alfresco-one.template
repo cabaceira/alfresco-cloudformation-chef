@@ -59,7 +59,8 @@
                         "RDSInstanceType",
                         "RDSDBName",
                         "RDSUsername",
-                        "RDSPassword"
+                        "RDSPassword",
+                        "S3BucketName"
                     ]
                 },
                 {
@@ -144,6 +145,9 @@
                 },
                 "RDSUsername": {
                     "default": "RDS User Name"
+                },
+                "S3BucketName": {
+                    "default": "S3 Bucket Name for temporary semaphore only, EFS is used for ContentStore"
                 },
                 "VPCID": {
                     "default": "VPC ID"
@@ -367,6 +371,11 @@
             "Description": "User name for the Amazon RDS MySQL database",
             "Type": "String"
         },
+        "S3BucketName": {
+            "Default": "",
+            "Description": "Name of the S3 bucket used for temporary semaphore. DO NOT include uppercase characters.",
+            "Type": "String"
+        },
         "VPCID": {
             "Description": "ID of your existing VPC for deployment",
             "Type": "AWS::EC2::VPC::Id"
@@ -529,6 +538,20 @@
             "sa-east-1": {
               "endpoint": "s3-sa-east-1.amazonaws.com"
             }
+        }
+    },
+    "Conditions": {
+        "CustomS3BucketName": {
+            "Fn::Not": [
+                {
+                    "Fn::Equals": [
+                        {
+                            "Ref": "S3BucketName"
+                        },
+                        ""
+                    ]
+                }
+            ]
         }
     },
     "Resources": {
@@ -1204,6 +1227,11 @@
                                                 "Ref": "RDSPassword"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
+                                            "sed -i 's/@@CONTENTSTORE_S3_BUCKET@@/",
+                                            {
+                                                "Ref": "S3Bucket"
+                                            },
+                                            "/g' /etc/chef/chef-client.json\n",
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
@@ -1591,7 +1619,11 @@
                                                 "Ref": "RDSPassword"
                                             },
                                             "/g' /etc/chef/chef-client.json\n",
-
+                                            "sed -i 's/@@CONTENTSTORE_S3_BUCKET@@/",
+                                            {
+                                                "Ref": "S3Bucket"
+                                            },
+                                            "/g' /etc/chef/chef-client.json\n",
                                             "sed -i 's/@@AWS_REGION@@/",
                                             {
                                                 "Ref": "AWS::Region"
