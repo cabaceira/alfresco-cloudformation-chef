@@ -1085,7 +1085,6 @@
                         "Ref": "PublicSubnet1ID"
                     }
                 ],
-                "AvailabilityZones" : [ "us-east-1a" ],
                 "SecurityGroups": [
                     {
                         "Ref": "ELBSecurityGroup"
@@ -1098,18 +1097,12 @@
                     {
                         "LoadBalancerPort": "80",
                         "InstancePort": "80",
-                        "Protocol": "HTTP",
-                        "PolicyNames": [
-                            "AlfrescoSetup"
-                        ]
+                        "Protocol": "HTTP"
                     },
                     {
                         "LoadBalancerPort": "5601",
                         "InstancePort": "5601",
-                        "Protocol": "HTTP",
-                        "PolicyNames": [
-                            "AlfrescoSetup"
-                        ]
+                        "Protocol": "HTTP"
                     },
                     {
                         "LoadBalancerPort": "9200",
@@ -1326,6 +1319,7 @@
                                             "rm -fr /etc/tomcat-solr /var/lib/tomcat-solr /usr/share/tomcat-solr /var/log/tomcat-solr /var/cache/tomcat-solr /usr/share/tomcat/alf_data/solrhome /usr/share/tomcat/alf_data/solrContentStore /usr/share/tomcat/alf_data/solr4Backup /usr/share/tomcat/alf_data/newAlfrescoModels /etc/sysconfig/tomcat-solr /etc/cron.d/solr-cleaner.cron /usr/lib/systemd/system/tomcat-solr.service\n",
                                             "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/\n",
                                             "chown tomcat:tomcat /usr/share/tomcat/alf-data \n",
+                                            "echo \"",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/ nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0\" >> /etc/fstab \n",
                                             "cd /etc/chef; chef-client -z -j chef-client.json\n",
                                             "curl 'http://localhost/alfresco/s/enterprise/admin?t=%2Fenterprise%2Fadmin%2Fadmin-transformations' -u admin:",
                                             {
@@ -1726,6 +1720,7 @@
                                             "rm -fr /etc/tomcat-share /var/lib/tomcat-share /usr/share/tomcat-share /var/log/tomcat-share /var/cache/tomcat-share /etc/sysconfig/tomcat-share /usr/lib/systemd/system/tomcat-share.service\n",
                                             "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/\n",
                                             "chown tomcat:tomcat /usr/share/tomcat/alf-data \n",
+                                            "echo \"",{ "Ref" : "AlfrescoContentStoreFileSystem" },".efs.",{ "Ref": "AWS::Region" },".amazonaws.com:/ /usr/share/tomcat/alf-data/ nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0\" >> /etc/fstab \n",
                                             "cd /etc/chef; chef-client -z -j chef-client.json\n",
                                             "curl 'http://localhost/alfresco/s/enterprise/admin?t=%2Fenterprise%2Fadmin%2Fadmin-transformations' -u admin:",
                                             {
