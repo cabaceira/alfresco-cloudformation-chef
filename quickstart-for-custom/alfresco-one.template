@@ -863,7 +863,6 @@
         },
         "AlfrescoContentStoreFileSystem" : {
           "Type" : "AWS::EFS::FileSystem",
-          "PerformanceMode": "generalPurpose",
           "Properties" : {
             "FileSystemTags" : [
               {
