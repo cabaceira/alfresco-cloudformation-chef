@@ -9,7 +9,6 @@
 ### to install amps refer to the chef-alfresco documentation
 
 # custom packages
-yum install -y jq nfs-utils
 
 #Alfresco repo extension
 mkdir -p /usr/share/tomcat-alfresco/modules/platform/

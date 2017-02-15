@@ -1182,11 +1182,14 @@
                         ]
                     },
                     "Install": {
-
+                        "packages" : {
+                            "yum" : {
+                              "jq" : [],
+                              "nfs-utils" : []
+                            }
+                        },
                         "sources" : {
-                            "/opt/monitoring-agent": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
-                            },
+                            "/opt/monitoring-agent": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
                         },
                         "files": {
                             "/etc/chef/chef-client.json": {
@@ -1570,11 +1573,14 @@
                         ]
                     },
                     "Install": {
-
+                        "packages" : {
+                            "yum" : {
+                              "jq" : [],
+                              "nfs-utils" : []
+                            }
+                        },
                         "sources" : {
-                            "/opt/monitoring-agent": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
-                            },
+                            "/opt/monitoring-agent": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
                         },
                         "files": {
                             "/etc/chef/chef-client.json": {
