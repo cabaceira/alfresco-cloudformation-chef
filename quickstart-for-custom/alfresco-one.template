@@ -1182,22 +1182,16 @@
                         ]
                     },
                     "Install": {
-                        "packages" : {
-                            "yum" : {
-                              "jq" : [],
-                              "nfs-utils" : []
-                            }
+
+                        "sources" : {
+                            "/opt/monitoring-agent": {
+                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
+                            },
                         },
                         "files": {
                             "/etc/chef/chef-client.json": {
                                 "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/share-51.json",
                                 "mode": "000700",
-                                "owner": "root",
-                                "group": "root"
-                            },
-                            "/opt/monitoring-agent": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip",
-                                "mode": "000755",
                                 "owner": "root",
                                 "group": "root"
                             },
@@ -1331,12 +1325,12 @@
                                                 "Ref": "AlfrescoPassword"
                                             },
                                             " -H 'Content-Type: multipart/form-data; boundary=123456789' --data-binary $'--123456789\\r\\nContent-Disposition: form-data; name=\"Alfresco:Type=Configuration,Category=OOoJodconverter,id1=default|jodconverter.enabled\"\\r\\n\\r\\ntrue\\r\\n--123456789'\n",
-                                            "rm -fr /etc/chef/chef-client.json\n",
-                                            "rm -fr /etc/chef/nodes/*.json\n",
+                                            "#rm -fr /etc/chef/chef-client.json\n",
+                                            "#rm -fr /etc/chef/nodes/*.json\n",
                                             "chmod 700 /usr/share/tomcat/shared/classes/alfresco-global.properties\n",
                                             "chmod 700 /usr/share/tomcat/shared/classes/alfresco/web-extension/share-cluster-application-context.xml\n",
-                                            "rm -fr /etc/chef/replaceValues.sh\n",
-                                            "rm -fr /etc/chef/run.sh\n",
+                                            "#rm -fr /etc/chef/replaceValues.sh\n",
+                                            "#rm -fr /etc/chef/run.sh\n",
                                             "export REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone|rev| cut -c2-|rev)\n",
                                             "if [ $REGION != \"us-east-1\" ]; then echo \"s3service.s3-endpoint=s3-$REGION.amazonaws.com\" >> /usr/share/tomcat/shared/classes/alfresco-global.properties ; fi\n"
                                         ]
@@ -1576,21 +1570,16 @@
                         ]
                     },
                     "Install": {
-                        "packages" : {
-                            "yum" : {
-                              "jq" : []
-                            }
+
+                        "sources" : {
+                            "/opt/monitoring-agent": {
+                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
+                            },
                         },
                         "files": {
                             "/etc/chef/chef-client.json": {
                                 "source": "https://raw.githubusercontent.com/cabaceira/alfresco-cloudformation-chef/master/nodes/solr-51.json",
                                 "mode": "000700",
-                                "owner": "root",
-                                "group": "root"
-                            },
-                            "/opt/monitoring-agent": {
-                                "source": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip",
-                                "mode": "000755",
                                 "owner": "root",
                                 "group": "root"
                             },
@@ -1713,8 +1702,8 @@
                                             "rm -fr /var/log/haproxy\n",
                                             "systemctl stop mysql-default\n",
                                             "systemctl disable mysql-default\n",
-                                            "systemctl stop tomcat-solr\n",
-                                            "systemctl disable tomcat-solr\n",
+                                            "systemctl stop tomcat-share\n",
+                                            "systemctl disable tomcat-share\n",
                                             "yum remove -y mysql-server\n",
                                             "rm -fr /etc/mysql-default* /var/lib/mysql* /var/log/mysql-default* /usr/lib/systemd/system/mysql-default.service\n",
                                             "rm -fr /etc/tomcat-share /var/lib/tomcat-share /usr/share/tomcat-share /var/log/tomcat-share /var/cache/tomcat-share /etc/sysconfig/tomcat-share /usr/lib/systemd/system/tomcat-share.service\n",
@@ -1732,11 +1721,11 @@
                                                 "Ref": "AlfrescoPassword"
                                             },
                                             " -H 'Content-Type: multipart/form-data; boundary=123456789' --data-binary $'--123456789\\r\\nContent-Disposition: form-data; name=\"Alfresco:Type=Configuration,Category=OOoJodconverter,id1=default|jodconverter.enabled\"\\r\\n\\r\\ntrue\\r\\n--123456789'\n",
-                                            "rm -fr /etc/chef/chef-client.json\n",
-                                            "rm -fr /etc/chef/nodes/*.json\n",
+                                            "#rm -fr /etc/chef/chef-client.json\n",
+                                            "#rm -fr /etc/chef/nodes/*.json\n",
                                             "chmod 700 /usr/share/tomcat/shared/classes/alfresco-global.properties\n",
-                                            "rm -fr /etc/chef/replaceValues.sh\n",
-                                            "rm -fr /etc/chef/run.sh\n",
+                                            "#rm -fr /etc/chef/replaceValues.sh\n",
+                                            "#rm -fr /etc/chef/run.sh\n",
                                             "export REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone|rev| cut -c2-|rev)\n",
                                             "if [ $REGION != \"us-east-1\" ]; then echo \"s3service.s3-endpoint=s3-$REGION.amazonaws.com\" >> /usr/share/tomcat/shared/classes/alfresco-global.properties ; fi\n"
                                         ]
