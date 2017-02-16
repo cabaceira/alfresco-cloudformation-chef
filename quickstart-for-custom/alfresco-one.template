@@ -1189,7 +1189,7 @@
                             }
                         },
                         "sources" : {
-                            "/opt/monitoring-agent": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
+                            "/opt": "https://s3-eu-west-1.amazonaws.com/road2alfresco-utilities/monitoring-agent/monitoring-agent.zip"
                         },
                         "files": {
                             "/etc/chef/chef-client.json": {
