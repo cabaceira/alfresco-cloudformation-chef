@@ -25,9 +25,10 @@
             "db.username" : "@@DB_USERNAME@@",
             "db.password" : "@@DB_PASSWORD@@",
             "db.prefix" : "mysql",
-            "alfresco.cluster.enabled" : true,
-            "audit.enabled" : true,
-            "audit.alfresco-access.enabled" : true,
+            "db.driver" : "com.p6spy.engine.spy.P6SpyDriver",
+            "audit.enabled" : false,
+            "audit.alfresco-access.enabled" : false,
+            "alfresco.jmx.connector.enabled" : true,
             "solr.port" : "8090",
             "alfresco_user_store.adminpassword" : "@@ALFRESCO_PASSWORD@@"
         },

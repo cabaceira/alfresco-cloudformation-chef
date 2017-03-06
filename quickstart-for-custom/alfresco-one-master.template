@@ -30,7 +30,8 @@
                         "Bastion2PrivateIP",
                         "AlfrescoInstanceType",
                         "IndexInstanceType",
-                        "ElasticSearchInstanceType"
+                        "ElasticSearchMonInstanceType",
+                        "ElasticSearchMigInstanceType"
                     ]
                 },
                 {
@@ -124,8 +125,11 @@
                 "IndexNodesMinSize": {
                     "default": "Index Nodes Min Size"
                 },
-                "ElasticSearchInstanceType": {
-                    "default": "ElasticSearch Server Instance Type"
+                "ElasticSearchMonInstanceType": {
+                    "default": "ElasticSearch Monitoring Server Instance Type"
+                },
+                "ElasticSearchMigInstanceType": {
+                    "default": "ElasticSearch Migration Server Instance Type"
                 },
                 "KeyPairName": {
                     "default": "Key Pair Name"
@@ -332,9 +336,10 @@
             "Description": "The minimum size of the Auto Scaling group",
             "Type": "String"
         },
-        "ElasticSearchInstanceType": {
+        "ElasticSearchMonInstanceType": {
             "AllowedValues": [
                 "t2.large",
+                "t2.2xlarge",
                 "m4.large",
                 "m4.xlarge",
                 "m4.2xlarge",
@@ -359,7 +364,38 @@
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Default": "t2.large",
-            "Description": "Type of EC2 instance for the ElasticSearch instance",
+            "Description": "Type of EC2 instance for the ElasticSearch Monitoring instance",
+            "Type": "String"
+        },
+        "ElasticSearchMigInstanceType": {
+            "AllowedValues": [
+                "t2.large",
+                "t2.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "r3.large",
+                "r3.xlarge"
+            ],
+            "ConstraintDescription": "Must contain valid instance type",
+            "Default": "t2.2xlarge",
+            "Description": "Type of EC2 instance for the ElasticSearch Migration instance",
             "Type": "String"
         },
         "KeyPairName": {
@@ -702,8 +738,11 @@
                     "IndexNodesMinSize": {
                         "Ref": "IndexNodesMinSize"
                     },
-                    "ElasticSearchInstanceType": {
-                        "Ref": "ElasticSearchInstanceType"
+                    "ElasticSearchMonInstanceType": {
+                        "Ref": "ElasticSearchMonInstanceType"
+                    },
+                    "ElasticSearchMigInstanceType": {
+                        "Ref": "ElasticSearchMigInstanceType"
                     },
                     "KeyPairName": {
                         "Ref": "KeyPairName"
