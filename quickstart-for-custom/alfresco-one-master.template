@@ -474,7 +474,8 @@
                 "db.t2.large",
                 "db.m4.medium",
                 "db.m4.large",
-                "db.m4.xlarge"
+                "db.m4.xlarge",
+                "db.m4.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid RDS instance type",
             "Default": "db.t2.small",

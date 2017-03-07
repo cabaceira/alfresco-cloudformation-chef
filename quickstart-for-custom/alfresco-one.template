@@ -391,7 +391,8 @@
                 "db.t2.large",
                 "db.m4.medium",
                 "db.m4.large",
-                "db.m4.xlarge"
+                "db.m4.xlarge",
+                "db.m4.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid RDS instance type",
             "Default": "db.t2.small",
@@ -887,10 +888,11 @@
                         "Ref": "RDSSecurityGroup"
                     }
                 ],
-                "AllocatedStorage": "5",
+                "AllocatedStorage": "400",
                 "DBInstanceClass": {
                     "Ref": "RDSInstanceType"
                 },
+                "StorageType" : "gp2",
                 "Engine": "MySQL",
                 "MasterUsername": {
                     "Ref": "RDSUsername"
@@ -1289,6 +1291,49 @@
             }
         },
         "ElasticSearchMonInstance" : {
+              "DependsOn" : "AlfrescoSecurityGroup",
+              "Type" : "AWS::EC2::Instance",
+              "Properties" : {
+                  "ImageId" : "ami-11d5f777",
+                  "KeyName" : { "Ref" : "KeyPairName" },
+                  "InstanceType" : { "Ref" : "ElasticSearchMonInstanceType" },
+                  "IamInstanceProfile": {
+                      "Ref": "SetupRoleProfile"
+                  },
+                  "SecurityGroupIds": [
+                      {
+                          "Ref": "AlfrescoSecurityGroup"
+                      }
+                  ],
+                  "SubnetId" : {
+                      "Ref": "PrivateSubnet1ID"
+                  },
+                  "BlockDeviceMappings" : [
+                    {
+                      "DeviceName" : "/dev/sda1",
+                      "Ebs" : { "VolumeSize" : "200" }
+                    }
+                  ],
+                  "Tags" : [ {
+                     "Key" : "Name",
+                     "Value" : "ElasticSearch Migration Server node"
+                 } ],
+                 "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "# Put here whatever you need to run in this instance\n",
+                                "# is important to end each line with backslash n and comma\n",
+                                "# in all lines but the last one\n"
+                            ]
+                        ]
+                    }
+                }
+            }
+        },
+        "ElasticSearchMigInstance" : {
               "DependsOn" : "AlfrescoSecurityGroup",
               "Type" : "AWS::EC2::Instance",
               "Properties" : {
