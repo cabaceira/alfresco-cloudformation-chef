@@ -61,7 +61,8 @@
                         "RDSDBName",
                         "RDSUsername",
                         "RDSPassword",
-                        "S3BucketName"
+                        "S3BucketName",
+                        "AlfrescoContentStoreFileSystemName"
                     ]
                 },
                 {
@@ -153,6 +154,9 @@
                 "S3BucketName": {
                     "default": "S3 Bucket Name for temporary semaphore only, EFS is used for ContentStore"
                 },
+                "AlfrescoContentStoreFileSystemName": {
+                    "default": "Alfresco ContentStore EFS Name"
+                },
                 "VPCID": {
                     "default": "VPC ID"
                 }
@@ -162,29 +166,20 @@
     "Parameters": {
         "AlfrescoInstanceType": {
             "AllowedValues": [
-                "t2.large",
-                "t2.large",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "m3.medium",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge",
-                "c3.large",
-                "c3.xlarge",
-                "c3.2xlarge",
-                "c3.4xlarge",
-                "c3.8xlarge",
-                "r3.large",
-                "r3.xlarge"
+              "c3.large",
+              "c3.xlarge",
+              "c3.2xlarge",
+              "c3.4xlarge",
+              "c3.8xlarge",
+              "c4.large",
+              "c4.xlarge",
+              "c4.2xlarge",
+              "c4.4xlarge",
+              "c4.8xlarge",
+              "t2.large",
+              "m4.large",
+              "m4.xlarge",
+              "m4.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Default": "m4.xlarge",
@@ -222,29 +217,20 @@
         },
         "IndexInstanceType": {
             "AllowedValues": [
-                "t2.large",
-                "t2.large",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "m3.medium",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge",
-                "c3.large",
-                "c3.xlarge",
-                "c3.2xlarge",
-                "c3.4xlarge",
-                "c3.8xlarge",
-                "r3.large",
-                "r3.xlarge"
+              "c3.large",
+              "c3.xlarge",
+              "c3.2xlarge",
+              "c3.4xlarge",
+              "c3.8xlarge",
+              "c4.large",
+              "c4.xlarge",
+              "c4.2xlarge",
+              "c4.4xlarge",
+              "c4.8xlarge",
+              "t2.large",
+              "m4.large",
+              "m4.xlarge",
+              "m4.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Default": "m4.xlarge",
@@ -412,6 +398,11 @@
         "S3BucketName": {
             "Default": "",
             "Description": "Name of the S3 bucket used for temporary semaphore. DO NOT include uppercase characters.",
+            "Type": "String"
+        },
+        "AlfrescoContentStoreFileSystemName": {
+            "Default": "",
+            "Description": "Name of the EFS file sytem name used for ContentStore. Must be unique.",
             "Type": "String"
         },
         "VPCID": {
@@ -930,7 +921,7 @@
             "FileSystemTags" : [
               {
                 "Key" : "Name",
-                "Value" : "AlfrescoContentStoreFileSystem"
+                "Value" : { "Ref": "AlfrescoContentStoreFileSystemName" },
               }
             ]
           }
@@ -1316,7 +1307,7 @@
                   ],
                   "Tags" : [ {
                      "Key" : "Name",
-                     "Value" : "ElasticSearch Migration Server node"
+                     "Value" : "ElasticSearch Monitoring Server node"
                  } ],
                  "UserData": {
                     "Fn::Base64": {

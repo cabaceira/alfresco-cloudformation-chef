@@ -40,7 +40,7 @@
             "db.username" : "@@DB_USERNAME@@",
             "db.password" : "@@DB_PASSWORD@@",
             "db.prefix" : "mysql",
-            "db.driver" : "com.p6spy.engine.spy.P6SpyDriver",
+            "db.driver" : "org.gjt.mm.mysql.Driver",
             "alfresco_user_store.adminpassword" : "@@ALFRESCO_PASSWORD@@",
             "alfresco.cluster.enabled" : true,
             "audit.enabled" : false,
