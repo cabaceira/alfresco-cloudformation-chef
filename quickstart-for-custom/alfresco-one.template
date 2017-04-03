@@ -456,7 +456,7 @@
                 "ALFRESCOONEHVM": "ami-3e936851"
             },
             "eu-west-1": {
-                "ALFRESCOONEHVM": "ami-8292d8f1"
+                "ALFRESCOONEHVM": "ami-dd035fca"
             },
             "sa-east-1": {
                 "ALFRESCOONEHVM": "ami-5c51cd30"
