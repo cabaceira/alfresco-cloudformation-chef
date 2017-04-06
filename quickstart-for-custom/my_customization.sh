@@ -46,8 +46,8 @@ chown tomcat:tomcat  /usr/share/tomcat-alfresco/modules/platform/*
 chown tomcat:tomcat  /usr/share/tomcat-alfresco/modules/share/*
 
 # Mount remote filesystem
-#mkdir -p /usr/share/tomcat/alf_data/contentstore/s4hcdocumentumexport
-#mount -t nfs4 -o nfsvers=4.1 34.248.188.102:/ /usr/share/tomcat/alf_data/contentstore/s4hcdocumentumexport
+mkdir -p /usr/share/tomcat/alf_data/contentstore/s4hcdocumentumexport
+mount -t nfs4 -o nfsvers=4.1 34.252.140.11:/ /usr/share/tomcat/alf_data/contentstore/s4hcdocumentumexport
 
 # Set back logging to Tomcat files and restart rsyslog
 #cat <<EOF > /etc/rsyslog.d/tomcat-alfresco.conf
