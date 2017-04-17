@@ -179,7 +179,13 @@
               "t2.large",
               "m4.large",
               "m4.xlarge",
-              "m4.2xlarge"
+              "m4.2xlarge",
+              "i3.large",
+              "i3.xlarge",
+              "i3.2xlarge",
+              "i3.4xlarge",
+              "i3.8xlarge",
+              "i3.16xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Default": "m4.xlarge",
@@ -921,7 +927,7 @@
             "FileSystemTags" : [
               {
                 "Key" : "Name",
-                "Value" : { "Ref": "AlfrescoContentStoreFileSystemName" },
+                "Value" : { "Ref": "AlfrescoContentStoreFileSystemName" }
               }
             ]
           }

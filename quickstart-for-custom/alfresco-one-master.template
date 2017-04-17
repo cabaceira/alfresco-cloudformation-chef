@@ -202,7 +202,13 @@
               "t2.large",
               "m4.large",
               "m4.xlarge",
-              "m4.2xlarge"
+              "m4.2xlarge",
+              "i3.large",
+              "i3.xlarge",
+              "i3.2xlarge",
+              "i3.4xlarge",
+              "i3.8xlarge",
+              "i3.16xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Default": "m4.xlarge",
@@ -499,7 +505,7 @@
             "Description": "The CIDR IP range that is permitted to access the Alfresco One software. We recommend that you set this value to a trusted IP range.",
             "Type": "String"
         },
-         "BastionAMIOS": {
+        "BastionAMIOS": {
             "AllowedValues": [
                 "Amazon-Linux-HVM",
                 "CentOS-7-HVM",
